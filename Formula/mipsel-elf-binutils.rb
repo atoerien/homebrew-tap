@@ -1,9 +1,9 @@
 class MipselElfBinutils < Formula
   desc "GNU binary tools for mipsel cross development"
   homepage "https://www.gnu.org/software/binutils/binutils.html"
-  url "https://ftp.gnu.org/gnu/binutils/binutils-2.41.tar.bz2"
-  mirror "https://ftpmirror.gnu.org/binutils/binutils-2.41.tar.bz2"
-  sha256 "a4c4bec052f7b8370024e60389e194377f3f48b56618418ea51067f67aaab30b"
+  url "https://ftp.gnu.org/gnu/binutils/binutils-2.42.tar.bz2"
+  mirror "https://ftpmirror.gnu.org/binutils/binutils-2.42.tar.bz2"
+  sha256 "aa54850ebda5064c72cd4ec2d9b056c294252991486350d9a97ab2a6dfdfaf12"
   license all_of: ["GPL-2.0-or-later", "GPL-3.0-or-later", "LGPL-2.0-or-later", "LGPL-3.0-only"]
 
   uses_from_macos "bison" => :build
