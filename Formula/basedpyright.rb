@@ -3,15 +3,22 @@ require "language/node"
 class Basedpyright < Formula
   desc "Static type checking for Python (but based)"
   homepage "https://github.com/DetachHead/basedpyright"
-  url "https://github.com/DetachHead/basedpyright/releases/download/v1.13.3/basedpyright-1.13.3.tar.gz"
-  sha256 "728d7098250db8d18bc4b48df8f93dfd9c79d155c3c99d41256a6caa6a21232e"
+  url "https://github.com/DetachHead/basedpyright/releases/download/v1.15.0/basedpyright-1.15.0.tar.gz"
+  sha256 "3f268d7909a17df5a01f380693c91ef389f8471b720641b9a829f1aa45798aca"
   license "MIT"
-  head "https://github.com/DetachHead/basedpyright.git", branch: "main"
+
+  head do
+    url "https://github.com/DetachHead/basedpyright.git", branch: "main"
+    depends_on "python" => :build
+  end
 
   depends_on "node"
 
   def install
     if build.head?
+      system "./pw", "pdm", "install", "--group=docstubs", "--no-self", "--no-default"
+      system "./pw", "pdm", "run", "generate_docstubs"
+
       system "npm", "install", *Language::Node.local_npm_install_args
       cd "packages/pyright" do
         system "npm", "run", "build"
