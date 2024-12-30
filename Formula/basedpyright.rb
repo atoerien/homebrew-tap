@@ -3,9 +3,13 @@ require "language/node"
 class Basedpyright < Formula
   desc "Static type checking for Python (but based)"
   homepage "https://github.com/DetachHead/basedpyright"
-  url "https://github.com/DetachHead/basedpyright/releases/download/v1.15.0/basedpyright-1.15.0.tar.gz"
-  sha256 "3f268d7909a17df5a01f380693c91ef389f8471b720641b9a829f1aa45798aca"
+  url "https://github.com/DetachHead/basedpyright/releases/download/v1.23.1/basedpyright-1.23.1.tar.gz"
+  sha256 "d207fabc5b62dc63bcaaa109c9af027ab7a454d5e0981d35ec5b99df4f4b3837"
   license "MIT"
+
+  resource "docstubs" do
+    url "https://github.com/atoerien/typeshed.git", branch: "main"
+  end
 
   head do
     url "https://github.com/DetachHead/basedpyright.git", branch: "main"
@@ -16,8 +20,12 @@ class Basedpyright < Formula
 
   def install
     if build.head?
-      system "./pw", "pdm", "install", "--group=docstubs", "--no-self", "--no-default"
-      system "./pw", "pdm", "run", "generate_docstubs"
+      resource("docstubs").stage do
+        mkdir buildpath/"docstubs"
+        (buildpath/"docstubs").install "stdlib", "stubs", "LICENSE", "README.md"
+        commit = Pathname.new(".git/refs/heads/main").read
+        (buildpath/"docstubs/commit.txt").write commit
+      end
 
       system "npm", "install", *Language::Node.local_npm_install_args
       cd "packages/pyright" do
@@ -29,6 +37,17 @@ class Basedpyright < Formula
     else
       cd "basedpyright" do
         (libexec/"basedpyright").install "dist"
+
+        # replace typeshed-fallback
+        resource("docstubs").stage do
+          typeshed_fallback = libexec/"basedpyright/dist/typeshed-fallback"
+          rm_r typeshed_fallback
+          mkdir typeshed_fallback
+          typeshed_fallback.install "stdlib", "stubs", "LICENSE", "README.md"
+          commit = Pathname.new(".git/refs/heads/main").read
+          (typeshed_fallback/"commit.txt").write commit
+        end
+
         (libexec/"basedpyright").install "index.js"
         chmod 0755, "#{libexec}/basedpyright/index.js"
         (libexec/"basedpyright").install "langserver.index.js"
@@ -38,9 +57,6 @@ class Basedpyright < Formula
 
     bin.install_symlink libexec/"basedpyright/index.js" => "basedpyright"
     bin.install_symlink libexec/"basedpyright/langserver.index.js" => "basedpyright-langserver"
-
-    # Replace universal binaries with native slices
-    deuniversalize_machos
   end
 
   test do
