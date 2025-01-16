@@ -1,8 +1,8 @@
 class JavaDebug < Formula
   desc "The debug server implementation for Java"
   homepage "https://github.com/microsoft/java-debug"
-  url "https://github.com/microsoft/java-debug/archive/refs/tags/0.53.0.tar.gz"
-  sha256 "df7a420d7d5efc79ac2e6db5d0cc119db1ae6f4fbe84cc24f6bab4aa6791ef37"
+  url "https://github.com/microsoft/java-debug/archive/refs/tags/0.53.1.tar.gz"
+  sha256 "8a16e39837b1d21826cc31160c294e6bf87ede050b2a3fb8c985b50819841646"
   license "EPL-1.0"
 
   head "https://github.com/microsoft/java-debug.git", branch: "main"
