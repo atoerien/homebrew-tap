@@ -3,8 +3,8 @@ require "language/node"
 class Basedpyright < Formula
   desc "Static type checking for Python (but based)"
   homepage "https://github.com/DetachHead/basedpyright"
-  url "https://github.com/DetachHead/basedpyright/releases/download/v1.31.0/basedpyright-1.31.0.tar.gz"
-  sha256 "900a573a525a0f66f884075c2a98711bb9478e44dc60ffdf182ef681bf8e2c76"
+  url "https://github.com/DetachHead/basedpyright/releases/download/v1.31.1/basedpyright-1.31.1.tar.gz"
+  sha256 "4e4d922a385f45dc93e50738d1131ec4533fee5d338b700ef2d28e2e0412e642"
   license "MIT"
 
   resource "docstubs" do
