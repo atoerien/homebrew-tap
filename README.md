@@ -1,10 +1,15 @@
-# atoerien Tap
+# atoerien/tap
 
 ## How do I install these formulae?
 
 `brew install atoerien/tap/<formula>`
 
-Or `brew tap atoerien/tap` and then `brew install <formula>`.
+Or, in a `brew bundle` `Brewfile`:
+
+```ruby
+tap "atoerien/tap"
+brew "<formula>"
+```
 
 ## Documentation
 
