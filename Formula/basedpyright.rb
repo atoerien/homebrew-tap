@@ -7,16 +7,16 @@ class Basedpyright < Formula
   sha256 "1f47bc6f45cbcc5d6f8619d60aa42128e4b38942f5118dcd4bc20c3466c5e02f"
   license "MIT"
 
-  resource "docstubs" do
-    url "https://github.com/atoerien/typeshed.git", branch: "main"
-  end
-
   head do
     url "https://github.com/DetachHead/basedpyright.git", branch: "main"
     depends_on "python" => :build
   end
 
   depends_on "node"
+
+  resource "docstubs" do
+    url "https://github.com/atoerien/typeshed.git", branch: "main"
+  end
 
   def install
     if build.head?
@@ -27,7 +27,7 @@ class Basedpyright < Formula
         (buildpath/"docstubs/commit.txt").write commit
       end
 
-      system "npm", "install", *Language::Node.local_npm_install_args
+      system "npm", "install", *std_npm_args(prefix: false)
       cd "packages/pyright" do
         system "npm", "run", "build"
         (libexec/"basedpyright").install "dist"

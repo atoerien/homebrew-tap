@@ -12,7 +12,7 @@ class Valgrind < Formula
 
     on_macos do
       on_intel do
-        if :arch == :x86 and Xcode.version >= "10.14.6" then
+        if :arch == :x86 && Xcode.version >= "10.14.6"
           odie "Valgrind cannot build in 32-bit using Xcode 10.14.6 or later"
         end
       end

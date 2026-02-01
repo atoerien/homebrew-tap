@@ -1,5 +1,5 @@
 class JavaDebug < Formula
-  desc "The debug server implementation for Java"
+  desc "Debug server implementation for Java"
   homepage "https://github.com/microsoft/java-debug"
   url "https://github.com/microsoft/java-debug/archive/refs/tags/0.53.1.tar.gz"
   sha256 "8a16e39837b1d21826cc31160c294e6bf87ede050b2a3fb8c985b50819841646"
