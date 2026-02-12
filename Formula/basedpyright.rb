@@ -1,8 +1,8 @@
 class Basedpyright < Formula
-  desc "Static type checking for Python (but based)"
+  desc "Pyright fork with various improvements and built-in pylance features"
   homepage "https://github.com/DetachHead/basedpyright"
-  url "https://github.com/DetachHead/basedpyright/releases/download/v1.37.4/basedpyright-1.37.4.tar.gz"
-  sha256 "f818d8b56c1e7f639dfbdaf875aa6b0bd53eef08204389959027d3d7fb2017ed"
+  url "https://registry.npmjs.org/basedpyright/-/basedpyright-1.37.4.tgz"
+  sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   license "MIT"
 
   head do
@@ -32,29 +32,27 @@ class Basedpyright < Formula
         (libexec/"basedpyright").install "index.js"
         (libexec/"basedpyright").install "langserver.index.js"
       end
+      (libexec/"basedpyright").install "LICENSE.txt"
+      bin.install_symlink libexec/"basedpyright/index.js" => "basedpyright"
+      bin.install_symlink libexec/"basedpyright/langserver.index.js" => "basedpyright-langserver"
     else
-      cd "basedpyright" do
-        (libexec/"basedpyright").install "dist"
+      system "npm", "install", *std_npm_args
+      bin.install_symlink libexec/"bin/pyright" => "basedpyright"
+      bin.install_symlink libexec/"bin/pyright-langserver" => "basedpyright-langserver"
 
-        # replace typeshed-fallback
-        resource("docstubs").stage do
-          typeshed_fallback = libexec/"basedpyright/dist/typeshed-fallback"
-          rm_r typeshed_fallback
-          mkdir typeshed_fallback
-          typeshed_fallback.install "stdlib", "stubs", "LICENSE", "README.md"
-          commit = Pathname.new(".git/refs/heads/main").read
-          (typeshed_fallback/"commit.txt").write commit
-        end
+      # Remove empty folder to make :all bottle
+      rm_r libexec/"lib/node_modules/basedpyright/node_modules" if OS.mac?
 
-        (libexec/"basedpyright").install "index.js"
-        chmod 0755, "#{libexec}/basedpyright/index.js"
-        (libexec/"basedpyright").install "langserver.index.js"
-        chmod 0755, "#{libexec}/basedpyright/langserver.index.js"
+      # replace typeshed-fallback
+      resource("docstubs").stage do
+        typeshed_fallback = libexec/"lib/node_modules/basedpyright/dist/typeshed-fallback"
+        rm_r typeshed_fallback
+        mkdir typeshed_fallback
+        typeshed_fallback.install "stdlib", "stubs", "LICENSE", "README.md"
+        commit = Pathname.new(".git/refs/heads/main").read
+        (typeshed_fallback/"commit.txt").write commit
       end
     end
-
-    bin.install_symlink libexec/"basedpyright/index.js" => "basedpyright"
-    bin.install_symlink libexec/"basedpyright/langserver.index.js" => "basedpyright-langserver"
   end
 
   test do
